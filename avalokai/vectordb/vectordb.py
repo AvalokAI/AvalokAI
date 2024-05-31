@@ -50,6 +50,22 @@ class ChromaVectorDB(VectorDB):
             ids=ids,
         )
 
+    def retrive_chunks(self, query_embedding: list, top_k: int):
+        results = self.collection.query(
+            query_embeddings=[query_embedding],
+            n_results=top_k,
+            include=["distances"],
+        )
+
+        print(results)
+
+        matches = [
+            {"id": id, "score": distance}
+            for id, distance in zip(results["ids"][0], results["distances"][0])
+        ]
+
+        return matches
+
 
 class PineConeVectorDB:
     def __init__(self, dimension) -> None:

@@ -17,4 +17,4 @@ class Embed:
 
     def embed_multiple_documents(self, sentences: list[str]):
         embeddings = self.model.encode(sentences)
-        return embeddings
+        return embeddings.tolist()
