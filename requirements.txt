@@ -1,0 +1,6 @@
+sentence-transformers
+langchain
+pandas
+pinecone
+pyarrow
+chromadb
