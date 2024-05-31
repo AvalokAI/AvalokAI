@@ -1,4 +1,3 @@
-from langchain_core.documents.base import Document
 from sentence_transformers import SentenceTransformer
 
 

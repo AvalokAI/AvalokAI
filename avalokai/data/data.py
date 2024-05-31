@@ -21,9 +21,16 @@ class VectorDBData:
         self.embedding = embedding
         self.metadata = metadata
 
-    def get_data(embeddings: list, splits: list[Document], id: str):
+    # def get_data(embeddings: list, splits: list[Document], id: str):
+    #     vectors: list[VectorDBData] = []
+    #     for i, (embedding, split) in enumerate(zip(embeddings, splits)):
+    #         vector = VectorDBData(f"{id}-{i}", embedding, split.metadata)
+    #         vectors.append(vector)
+    #     return vectors
+
+    def get_data(embeddings: list, metadatas: list[dict], ids: list[str]):
         vectors: list[VectorDBData] = []
-        for i, (embedding, split) in enumerate(zip(embeddings, splits)):
-            vector = VectorDBData(f"{id}-{i}", embedding, split.metadata)
+        for embedding, metadata, id in zip(embeddings, metadatas, ids):
+            vector = VectorDBData(id, embedding, metadata)
             vectors.append(vector)
         return vectors
