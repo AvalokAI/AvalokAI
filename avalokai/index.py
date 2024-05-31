@@ -1,9 +1,9 @@
 from tqdm import tqdm
 
-from data.data import RawData, VectorDBData
-from embed.chunk import Chunk
-from embed.embed import Embed
-from vectordb.vectordb import ChromaVectorDB
+from .data.data import RawData, VectorDBData
+from .embed.chunk import Chunk
+from .embed.embed import Embed
+from .vectordb.vectordb import ChromaVectorDB
 
 
 class Indexer:

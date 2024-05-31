@@ -4,7 +4,7 @@ import chromadb
 from langchain_core.documents.base import Document
 from pinecone import Pinecone, ServerlessSpec
 
-from data.data import VectorDBData
+from ..data.data import VectorDBData
 
 
 class VectorDB:
