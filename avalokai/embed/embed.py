@@ -1,3 +1,5 @@
+from enum import Enum
+
 from sentence_transformers import SentenceTransformer
 
 
@@ -17,3 +19,7 @@ class Embed:
     def embed_multiple_documents(self, sentences: list[str]):
         embeddings = self.model.encode(sentences)
         return embeddings.tolist()
+
+    def print_config(self):
+        print(self.model.get_max_seq_length())
+        print(self.model[0].auto_model.config.max_position_embeddings)

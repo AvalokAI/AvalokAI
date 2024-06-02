@@ -1,5 +1,8 @@
+import pathlib
+
 from tqdm import tqdm
 
+from .configs.config import Config
 from .data.data import RawData, VectorDBData
 from .data.dataloader import get_data_loader
 from .embed.chunk import Chunk
@@ -8,10 +11,13 @@ from .vectordb.vectordb import ChromaVectorDB
 
 
 class Indexer:
-    def __init__(self, name: str) -> None:
+    def __init__(self, dbname: str) -> None:
+        repo_path = pathlib.Path(__file__).parent.resolve()
+        self.config = Config(repo_path.joinpath("configs", "config.yaml"))
         self.chunker = Chunk()
-        self.embedder = Embed()
-        self.db = ChromaVectorDB(self.embedder.get_embedding_size(), name)
+        self.embedder = Embed(self.config.model_name)
+        exit(0)
+        self.db = ChromaVectorDB(self.embedder.get_embedding_size(), dbname)
 
     def index_single_document(self, data: RawData):
         document = data.get_langchain_document()
