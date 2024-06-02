@@ -32,21 +32,12 @@ class RawDataDataset(Dataset):
 
 
 def get_data_loader(datas: list[RawData], chunker: Chunk, config: Config):
-    tokenizer = AutoTokenizer.from_pretrained(config.model_name)
 
     def collate_fn(samples):
         final_data = {"id": [], "content": [], "metadata": []}
         for sample in samples:
             for key in final_data.keys():
                 final_data[key].extend(sample[key])
-        tokenized_text = tokenizer(
-            final_data["content"],
-            max_length=config.max_seq_len,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-        )
-        final_data["tokenized_text"] = tokenized_text
 
         return final_data
 

@@ -1,6 +1,7 @@
 import pathlib
 
 from tqdm import tqdm
+from transformers import AutoTokenizer
 
 from .configs.config import Config
 from .data.data import RawData, VectorDBData
@@ -32,8 +33,17 @@ class Indexer:
 
     def index_multiple_documents(self, datas: list[RawData]):
         dataloader = get_data_loader(datas, self.chunker, self.config)
+        tokenizer = AutoTokenizer.from_pretrained(self.config.model_name)
         for batch in tqdm(dataloader):
-            embeddings = self.embedder.embed_multiple_documents(batch["tokenized_text"])
+            tokenized_text = tokenizer(
+                batch["content"],
+                max_length=self.config.max_seq_len,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+            )
+            # final_data["tokenized_text"] = tokenized_text
+            embeddings = self.embedder.embed_multiple_documents(tokenized_text)
             vectors: list[VectorDBData] = VectorDBData.get_data(
                 embeddings, batch["metadata"], batch["id"]
             )
