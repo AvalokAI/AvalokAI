@@ -31,7 +31,7 @@ class Indexer:
         self.db.insert_multiple(vectors)
 
     def index_multiple_documents(self, datas: list[RawData]):
-        dataloader = get_data_loader(datas, self.chunker, config.batch_size)
+        dataloader = get_data_loader(datas, self.chunker, self.config.batch_size)
         for batch in tqdm(dataloader):
             embeddings = self.embedder.embed_multiple_documents(batch["content"])
             vectors: list[VectorDBData] = VectorDBData.get_data(
