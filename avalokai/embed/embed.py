@@ -9,7 +9,7 @@ from ..configs.config import ModelType
 
 
 class Embed:
-    def __init__(self, model_name: str, model_type: ModelType) -> None:
+    def __init__(self, model_name: str, model_type: ModelType, device: str) -> None:
 
         if model_type == ModelType.HUGGING_FACE:
             self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
@@ -17,6 +17,8 @@ class Embed:
             self.model = SentenceTransformer(model_name, trust_remote_code=True)
         else:
             raise ValueError("model type not correct")
+
+        self.model.to(device)
 
     def embed_single_text(self, text: str):
         sentences = [text]
@@ -32,9 +34,6 @@ class Embed:
         embeddings = outputs.last_hidden_state[:, 0]
 
         embeddings = F.normalize(embeddings, p=2, dim=1)
-        import pdb
-
-        pdb.set_trace()
         return embeddings.tolist()
 
     def print_config(self):

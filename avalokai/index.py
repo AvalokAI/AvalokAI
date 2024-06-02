@@ -1,5 +1,6 @@
 import pathlib
 
+import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer
 
@@ -16,7 +17,10 @@ class Indexer:
         repo_path = pathlib.Path(__file__).parent.resolve()
         self.config = Config(repo_path.joinpath("configs", "config.yaml"))
         self.chunker = Chunk(self.config.chunk_size, self.config.chunk_overlap)
-        self.embedder = Embed(self.config.model_name, self.config.model_type)
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        self.embedder = Embed(
+            self.config.model_name, self.config.model_type, self.device
+        )
         self.db = ChromaVectorDB(self.config.embedding_size, dbname)
 
     def index_single_document(self, data: RawData):
@@ -41,7 +45,7 @@ class Indexer:
                 padding=True,
                 truncation=True,
                 return_tensors="pt",
-            )
+            ).to(self.device)
             # final_data["tokenized_text"] = tokenized_text
             embeddings = self.embedder.embed_multiple_documents(tokenized_text)
             vectors: list[VectorDBData] = VectorDBData.get_data(
