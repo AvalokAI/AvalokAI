@@ -1,23 +1,40 @@
 from enum import Enum
 
+import torch
+import torch.nn.functional as F
 from sentence_transformers import SentenceTransformer
+from transformers import AutoModel, AutoTokenizer
+
+from ..configs.config import ModelType
 
 
 class Embed:
-    def __init__(self, model_name="all-MiniLM-L6-v2") -> None:
-        # model_name = "nlpaueb/legal-bert-base-uncased"
-        self.model = SentenceTransformer(model_name, trust_remote_code=True)
+    def __init__(self, model_name: str, model_type: ModelType) -> None:
 
-    def get_embedding_size(self):
-        return self.model.get_sentence_embedding_dimension()
+        if model_type == ModelType.HUGGING_FACE:
+            self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+        elif model_type == ModelType.SENTENCE_TRANSFORMER:
+            self.model = SentenceTransformer(model_name, trust_remote_code=True)
+        else:
+            raise ValueError("model type not correct")
 
     def embed_single_text(self, text: str):
         sentences = [text]
         embeddings = self.model.encode(sentences)
         return embeddings[0].tolist()
 
-    def embed_multiple_documents(self, sentences: list[str]):
-        embeddings = self.model.encode(sentences)
+    # def embed_multiple_documents(self, sentences: list[str]):
+    #     embeddings = self.model.encode(sentences)
+    #     return embeddings.tolist()
+
+    def embed_multiple_documents(self, tokenized_text: torch.tensor):
+        outputs = self.model(**tokenized_text)
+        embeddings = outputs.last_hidden_state[:, 0]
+
+        embeddings = F.normalize(embeddings, p=2, dim=1)
+        import pdb
+
+        pdb.set_trace()
         return embeddings.tolist()
 
     def print_config(self):
