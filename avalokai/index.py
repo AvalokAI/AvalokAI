@@ -16,7 +16,6 @@ class Indexer:
         self.config = Config(repo_path.joinpath("configs", "config.yaml"))
         self.chunker = Chunk()
         self.embedder = Embed(self.config.model_name)
-        exit(0)
         self.db = ChromaVectorDB(self.embedder.get_embedding_size(), dbname)
 
     def index_single_document(self, data: RawData):

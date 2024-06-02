@@ -2,7 +2,6 @@ main_config:
   batch_size: 1000
   # model_name: "Alibaba-NLP/gte-large-en-v1.5"
   model_name: "intfloat/e5-mistral-7b-instruct"
-  context_length: 5000
 
 Alibaba-NLP/gte-large-en-v1.5:
   context_length: 8192
