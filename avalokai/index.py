@@ -30,10 +30,8 @@ class Indexer:
         )
         self.db.insert_multiple(vectors)
 
-    def index_multiple_documents(self, datas: list[RawData], batch_size=10):
-        if batch_size is None:
-            batch_size = 10
-        dataloader = get_data_loader(datas, self.chunker, batch_size)
+    def index_multiple_documents(self, datas: list[RawData]):
+        dataloader = get_data_loader(datas, self.chunker, config.batch_size)
         for batch in tqdm(dataloader):
             embeddings = self.embedder.embed_multiple_documents(batch["content"])
             vectors: list[VectorDBData] = VectorDBData.get_data(
