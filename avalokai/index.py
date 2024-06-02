@@ -46,7 +46,7 @@ class Indexer:
                 truncation=True,
                 return_tensors="pt",
             ).to(self.device)
-            # final_data["tokenized_text"] = tokenized_text
+
             embeddings = self.embedder.embed_multiple_documents(tokenized_text)
             vectors: list[VectorDBData] = VectorDBData.get_data(
                 embeddings, batch["metadata"], batch["id"]

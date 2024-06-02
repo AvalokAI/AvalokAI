@@ -46,7 +46,7 @@ def get_data_loader(datas: list[RawData], chunker: Chunk, config: Config):
         dataset,
         batch_size=config.batch_size,
         collate_fn=collate_fn,
-        num_workers=2,
+        num_workers=5,
         drop_last=False,
     )
     return dataloader

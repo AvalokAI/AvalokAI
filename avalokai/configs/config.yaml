@@ -1,7 +1,7 @@
 main_config:
   batch_size: 10
-  # model_name: "Alibaba-NLP/gte-large-en-v1.5"
-  model_name: "nlpaueb/legal-bert-base-uncased"
+  model_name: "Alibaba-NLP/gte-large-en-v1.5"
+  # model_name: "nlpaueb/legal-bert-base-uncased"
 
 Alibaba-NLP/gte-large-en-v1.5:
   context_length: 8192
