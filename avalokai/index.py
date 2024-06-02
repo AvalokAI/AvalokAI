@@ -14,7 +14,7 @@ class Indexer:
     def __init__(self, dbname: str) -> None:
         repo_path = pathlib.Path(__file__).parent.resolve()
         self.config = Config(repo_path.joinpath("configs", "config.yaml"))
-        self.chunker = Chunk(config.chunk_size, config.chunk_overlap)
+        self.chunker = Chunk(self.config.chunk_size, self.config.chunk_overlap)
         self.embedder = Embed(self.config.model_name)
         self.db = ChromaVectorDB(self.embedder.get_embedding_size(), dbname)
 
