@@ -19,6 +19,9 @@ class Embed:
             raise ValueError("model type not correct")
 
         self.model.to(device)
+        self.model.eval()
+        for param in self.model.parameters():
+            param.requires_grad = False
 
     def embed_single_text(self, text: str):
         sentences = [text]
