@@ -1,11 +1,11 @@
 main_config:
-  batch_size: 1000
-  # model_name: "Alibaba-NLP/gte-large-en-v1.5"
-  model_name: "intfloat/e5-mistral-7b-instruct"
+  batch_size: 10
+  model_name: "Alibaba-NLP/gte-large-en-v1.5"
+  # model_name: "intfloat/e5-mistral-7b-instruct"
 
 Alibaba-NLP/gte-large-en-v1.5:
   context_length: 8192
-  chunk_size: 1000
+  chunk_size: 4000
   chunk_overlap: 200
 
 all-MiniLM-L6-v2:
