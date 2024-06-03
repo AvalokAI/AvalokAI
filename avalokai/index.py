@@ -16,7 +16,7 @@ class Indexer:
     def __init__(self, dbname: str) -> None:
         repo_path = pathlib.Path(__file__).parent.resolve()
         self.config = Config(repo_path.joinpath("configs", "config.yaml"))
-        self.chunker = Chunk(self.config.chunk_size, self.config.chunk_overlap)
+        self.chunker = Chunk(self.config)
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.embedder = Embed(
             self.config.model_name, self.config.model_type, self.device
@@ -44,6 +44,7 @@ class Indexer:
                 max_length=self.config.max_seq_len,
                 padding=True,
                 truncation=True,
+                is_split_into_words=True,
                 return_tensors="pt",
             ).to(self.device)
 
