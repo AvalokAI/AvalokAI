@@ -17,12 +17,13 @@ class RawDataDataset(Dataset):
     def __getitem__(self, index: int):
         data = self.datas[index]
         document = data.get_langchain_document()
-        splits = self.chunker.get_chunks(document.page_content)
+        # splits = self.chunker.get_chunks(document.page_content)
+        splits = self.chunker.get_chunks([document])
 
         items = {"id": [], "content": [], "metadata": []}
         for i, split in enumerate(splits):
             items["id"].append(f"{data.id}-{i}")
-            items["content"].append(split)
+            items["content"].append(split.page_content)
             items["metadata"].append(document.metadata)
 
         return items

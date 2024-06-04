@@ -34,3 +34,4 @@ class Config:
                 setattr(self, key, main_config[key])
 
         self.max_seq_len = min(self.chunk_size, self.context_length)
+        self.max_seq_len = self.context_length

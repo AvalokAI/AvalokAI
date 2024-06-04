@@ -44,11 +44,12 @@ class Indexer:
                 max_length=self.config.max_seq_len,
                 padding=True,
                 truncation=True,
-                is_split_into_words=True,
                 return_tensors="pt",
-            ).to(self.device)
+            )
 
-            embeddings = self.embedder.embed_multiple_documents(tokenized_text)
+            embeddings = self.embedder.embed_multiple_documents(
+                tokenized_text.to(self.device)
+            )
             vectors: list[VectorDBData] = VectorDBData.get_data(
                 embeddings, batch["metadata"], batch["id"]
             )
