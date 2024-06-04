@@ -42,7 +42,7 @@ class Embed:
         print(f"Embed {time.time()-start}")
 
         start = time.time()
-        list_embed = embeddings.cpu().numpy()
+        list_embed = embeddings.tolist()
         print(f"To list {time.time()-start}")
 
         return list_embed
