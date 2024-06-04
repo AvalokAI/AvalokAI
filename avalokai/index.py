@@ -41,6 +41,7 @@ class Indexer:
         tokenizer = AutoTokenizer.from_pretrained(self.config.model_name)
         start = time.time()
         for batch in tqdm(dataloader):
+            print("---------------------------------------------------")
             print(f"Data load {time.time()-start}")
 
             start = time.time()
