@@ -1,42 +1,47 @@
-import torch
-import torch.nn.functional as F
-from torch.utils.data import DataLoader, Dataset
-from transformers import AutoModel, AutoTokenizer
-from transformers.tokenization_utils_base import BatchEncoding
+from torch.utils.data import DataLoader, IterableDataset, get_worker_info
 
-from ..configs.config import Config, ModelType
+from ..configs.config import Config
 from ..embed.chunk import Chunk
 from .data import RawData
 
 
-class RawDataDataset(Dataset):
+class RawDataDataset(IterableDataset):
     def __init__(self, datas: list[RawData], chunker: Chunk):
         self.datas = datas
         self.chunker = chunker
 
-    def __getitem__(self, index: int):
-        data = self.datas[index]
-        document = data.get_langchain_document()
-        # splits = self.chunker.get_chunks(document.page_content)
-        splits = self.chunker.get_chunks([document])
+    def __iter__(self):
+        worker_info = get_worker_info()
 
-        items = {"id": [], "content": [], "metadata": []}
-        for i, split in enumerate(splits):
-            items["id"].append(f"{data.id}-{i}")
-            items["content"].append(split.page_content)
-            items["metadata"].append(document.metadata)
+        if worker_info is None:
+            num_worker = 1
+            worker_id = 0
+        else:
+            num_worker = worker_info.num_workers
+            worker_id = worker_info.id
+        per_worker = len(data) // num_worker
+        datas = self.datas[worker_id * per_worker : (worker_id + 1) * per_worker]
 
-        return items
+        for data in datas:
+            document = data.get_langchain_document()
+            # splits = self.chunker.get_chunks(document.page_content)
+            splits = self.chunker.get_chunks([document])
 
-    def __len__(self):
-        return len(self.datas)
+            for i, split in enumerate(splits):
+                item = {
+                    "id": f"{data.id}-{i}",
+                    "content": split.page_content,
+                    "metadata": document.metadata,
+                }
+
+                yield item
 
 
 def collate_fn(samples):
     final_data = {"id": [], "content": [], "metadata": []}
     for sample in samples:
         for key in final_data.keys():
-            final_data[key].extend(sample[key])
+            final_data[key].append(sample[key])
 
     return final_data
 

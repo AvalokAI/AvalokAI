@@ -3,6 +3,7 @@ main_config:
   model_name: "Alibaba-NLP/gte-large-en-v1.5"
   # model_name: "nlpaueb/legal-bert-base-uncased"
 
+#assuming each token is avg 4 length
 Alibaba-NLP/gte-large-en-v1.5:
   context_length: 8192
   chunk_size: 16000
