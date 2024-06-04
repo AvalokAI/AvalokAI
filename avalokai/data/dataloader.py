@@ -19,7 +19,7 @@ class RawDataDataset(IterableDataset):
         else:
             num_worker = worker_info.num_workers
             worker_id = worker_info.id
-        per_worker = len(data) // num_worker
+        per_worker = len(self.datas) // num_worker
         datas = self.datas[worker_id * per_worker : (worker_id + 1) * per_worker]
 
         for data in datas:

@@ -33,5 +33,6 @@ class Config:
             if key in main_config:
                 setattr(self, key, main_config[key])
 
-        self.max_seq_len = min(self.chunk_size, self.context_length)
         self.max_seq_len = self.context_length
+        if "max_seq_len" in model_config:
+            self.max_seq_len = min(self.context_length, model_config["max_seq_len"])
