@@ -57,7 +57,7 @@ class Indexer:
             tokenized_text = tokenized_text.to(self.device)
             print(f"To gpu {time.time()-start}")
 
-            embeddings = self.embedder.embed_multiple_documents()
+            embeddings = self.embedder.embed_multiple_documents(tokenized_text)
 
             start = time.time()
             vectors: list[VectorDBData] = VectorDBData.get_data(
