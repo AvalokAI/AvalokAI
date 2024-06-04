@@ -33,11 +33,19 @@ class Embed:
     #     return embeddings.tolist()
 
     def embed_multiple_documents(self, tokenized_text: torch.tensor):
+        import time
+
+        start = time.time()
         outputs = self.model(**tokenized_text)
         embeddings = outputs.last_hidden_state[:, 0]
-
         embeddings = F.normalize(embeddings, p=2, dim=1)
-        return embeddings.tolist()
+        print(f"Embed {time.time()-start}")
+
+        start = time.time()
+        list_embed = embeddings.tolist()
+        print(f"To list {time.time()-start}")
+
+        return list_embed
 
     def print_config(self):
         print(self.model.get_max_seq_length())

@@ -1,4 +1,5 @@
 import pathlib
+import time
 
 import torch
 from tqdm import tqdm
@@ -38,7 +39,11 @@ class Indexer:
     def index_multiple_documents(self, datas: list[RawData]):
         dataloader = get_data_loader(datas, self.chunker, self.config)
         tokenizer = AutoTokenizer.from_pretrained(self.config.model_name)
+        start = time.time()
         for batch in tqdm(dataloader):
+            print(f"Data load {time.time()-start}")
+
+            start = time.time()
             tokenized_text = tokenizer(
                 batch["content"],
                 max_length=self.config.max_seq_len,
@@ -46,11 +51,23 @@ class Indexer:
                 truncation=True,
                 return_tensors="pt",
             )
+            print(f"Tokenize {time.time()-start}")
 
-            embeddings = self.embedder.embed_multiple_documents(
-                tokenized_text.to(self.device)
-            )
+            start = time.time()
+            tokenized_text = tokenized_text.to(self.device)
+            print(f"To gpu {time.time()-start}")
+
+            embeddings = self.embedder.embed_multiple_documents()
+
+            start = time.time()
             vectors: list[VectorDBData] = VectorDBData.get_data(
                 embeddings, batch["metadata"], batch["id"]
             )
+
+            print(f"convert to vector data {time.time()-start}")
+
+            start = time.time()
             self.db.insert_multiple(vectors)
+            print(f"insert in db {time.time()-start}")
+
+            start = time.time()
