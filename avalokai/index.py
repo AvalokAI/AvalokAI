@@ -5,8 +5,8 @@ import torch
 from tqdm import tqdm
 
 from .configs.config import Config
+from .embed import get_embedder
 from .embed.chunk import Chunk
-from .embed.embed import Embed
 from .sink.tasks import insert_embeddings
 from .sink.vectordb import ChromaVectorDB
 from .source.data import RawData
@@ -19,7 +19,7 @@ class Indexer:
         self.config = Config(repo_path.joinpath("configs", "config.yaml"))
         self.chunker = Chunk(self.config)
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
-        self.embedder = Embed(self.config, self.device)
+        self.embedder = get_embedder(self.config, self.device)
         self.db = ChromaVectorDB(self.config.embedding_size, dbname, create=True)
         self.dbname = dbname
 

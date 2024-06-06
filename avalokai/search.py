@@ -1,12 +1,12 @@
 from .embed.chunk import Chunk
-from .embed.embed import Embed
+from .embed.embed import EmbedOld
 from .sink.vectordb import ChromaVectorDB
 
 
 class Searcher:
     def __init__(self, name: str) -> None:
         self.chunker = Chunk()
-        self.embedder = Embed()
+        self.embedder = EmbedOld()
         self.db = ChromaVectorDB(self.embedder.get_embedding_size(), name)
 
     def search(self, query, top_k=10):

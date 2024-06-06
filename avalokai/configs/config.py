@@ -6,6 +6,8 @@ import yaml
 class ModelType(Enum):
     HUGGING_FACE = "hugging_face"
     SENTENCE_TRANSFORMER = "sentence_transformer"
+    OPENAI = "openai"
+    GEMINI = "gemini"
 
 
 class Config:
@@ -27,7 +29,7 @@ class Config:
                 self.model_type = model_type
                 break
 
-        assert hasattr(self, "model_type")
+        assert hasattr(self, "model_type"), f"Unsupported model type {model_type}"
 
         for key in ["context_length", "chunk_size", "chunk_overlap"]:
             if key in main_config:

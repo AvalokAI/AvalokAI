@@ -1,26 +1,44 @@
 import os
 
-import google.ai.generativelanguage as glm
 import google.generativeai as genai
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+from ..configs.config import Config
+from .embed import Embed
 
-for m in genai.list_models():
-    if "embedContent" in m.supported_generation_methods:
-        print(m.name)
 
-title = "The next generation of AI for developers and Google Workspace"
-sample_text = (
-    "Title: The next generation of AI for developers and Google Workspace"
-    "\n"
-    "Full article:\n"
-    "\n"
-    "Gemini API & Google AI Studio: An approachable way to explore and prototype with generative AI applications"
-)
+class GeminiEmbed(Embed):
+    def __init__(self, config: Config) -> None:
+        super().__init__()
+        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-model = "models/embedding-001"
-embedding = genai.embed_content(
-    model=model, content=sample_text, task_type="retrieval_document", title=title
-)
+        supported_models = [
+            m.name
+            for m in genai.list_models()
+            if "embedContent" in m.supported_generation_methods
+        ]
 
-print(embedding)
+        assert config.model_name in supported_models
+        self.model_name = config.model_name
+
+    def embed_single_text(self, text: str):
+        embedding = genai.embed_content(
+            model=self.model_name,
+            content=text,
+            task_type="retrieval_document",
+            title=None,
+        )
+        return embedding["embedding"]
+
+    def embed_multiple_documents(self, content: list[str]):
+
+        embeddings = []
+        for sample in content:
+            embedding = genai.embed_content(
+                model=self.model_name,
+                content=sample,
+                task_type="retrieval_document",
+                title=None,
+            )
+            embeddings.append(embedding["embedding"])
+
+        return embeddings
