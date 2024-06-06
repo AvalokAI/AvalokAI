@@ -24,7 +24,6 @@ class RawDataDataset(IterableDataset):
 
         for data in datas:
             document = data.get_langchain_document()
-            # splits = self.chunker.get_chunks(document.page_content)
             splits = self.chunker.get_chunks([document])
 
             for i, split in enumerate(splits):

@@ -4,7 +4,19 @@ import chromadb
 from langchain_core.documents.base import Document
 from pinecone import Pinecone, ServerlessSpec
 
-from ..data.data import VectorDBData
+
+class VectorDBData:
+    def __init__(self, id: str, embedding: list, metadata: dict) -> None:
+        self.id = id
+        self.embedding = embedding
+        self.metadata = metadata
+
+    def get_data(embeddings: list, metadatas: list[dict], ids: list[str]):
+        vectors: list[VectorDBData] = []
+        for embedding, metadata, id in zip(embeddings, metadatas, ids):
+            vector = VectorDBData(id, embedding, metadata)
+            vectors.append(vector)
+        return vectors
 
 
 class VectorDB:
@@ -28,12 +40,15 @@ class VectorDB:
 
 
 class ChromaVectorDB(VectorDB):
-    def __init__(self, dimension, name: str) -> None:
+    def __init__(self, dimension: int, name: str, create: bool) -> None:
         super().__init__(dimension)
         self.client = chromadb.HttpClient(host="localhost", port=8000)
-        self.collection = self.client.get_or_create_collection(
-            name=name, metadata={"hnsw:space": "cosine"}
-        )
+        if create:
+            self.collection = self.client.get_or_create_collection(
+                name=name, metadata={"hnsw:space": "cosine"}
+            )
+        else:
+            self.collection = self.client.get_collection(name=name)
 
     def get_insertable_format(self, data: list[VectorDBData]):
         embeddings = [sample.embedding for sample in data]

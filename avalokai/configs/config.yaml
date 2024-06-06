@@ -1,9 +1,14 @@
 main_config:
   batch_size: 23
-  model_name: "Alibaba-NLP/gte-large-en-v1.5"
+  # model_name: "Alibaba-NLP/gte-large-en-v1.5"
   # model_name: "nlpaueb/legal-bert-base-uncased"
+  model_name: "all-MiniLM-L6-v2"
 
-#assuming each token is avg 4 length
+# assuming each token is avg 4 length
+# context_length: model's context length
+# chunk_size = character length to break
+# max_seq_len: max_seq_len which model should actually process, should be less than context length
+
 Alibaba-NLP/gte-large-en-v1.5:
   context_length: 8192
   chunk_size: 16000
@@ -16,6 +21,8 @@ all-MiniLM-L6-v2:
   context_length: 256
   chunk_size: 1000
   chunk_overlap: 200
+  embedding_size: 384
+  max_seq_len: 256
   model_type: "sentence_transformer"
 
 intfloat/e5-mistral-7b-instruct:

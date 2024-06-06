@@ -1,6 +1,6 @@
 from .embed.chunk import Chunk
 from .embed.embed import Embed
-from .vectordb.vectordb import ChromaVectorDB
+from .sink.vectordb import ChromaVectorDB
 
 
 class Searcher:

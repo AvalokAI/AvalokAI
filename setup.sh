@@ -5,3 +5,5 @@ conda activate deepsearch
 conda install pytorch cpuonly -c pytorch
 
 pip install -r requirements.txt
+
+apt-get install rabbitmq-server
