@@ -7,3 +7,4 @@ chromadb
 google.generativeai
 Celery
 librabbitmq
+s3torchconnector

@@ -9,8 +9,7 @@ from .embed import get_embedder
 from .embed.chunk import Chunk
 from .sink.tasks import insert_embeddings
 from .sink.vectordb import ChromaVectorDB
-from .source.data import RawData
-from .source.dataloader import get_data_loader
+from .source import RawData, get_data_loader, get_raw_dataset
 
 
 class Indexer:
@@ -36,7 +35,8 @@ class Indexer:
     #     self.db.insert_multiple(vectors)
 
     def index_multiple_documents(self, datas: list[RawData]):
-        dataloader = get_data_loader(datas, self.chunker, self.config)
+        dataset = get_raw_dataset(datas, self.chunker)
+        dataloader = get_data_loader(dataset, self.config.batch_size, 4)
         start = time.time()
         for batch in tqdm(dataloader):
             print("---------------------------------------------------")
