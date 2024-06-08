@@ -1,6 +1,6 @@
 from sentence_transformers import SentenceTransformer
 
-from ..configs.config import Config, ModelType
+from ..configs import Config, ModelType
 from .embed import Embed
 
 

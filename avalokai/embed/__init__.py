@@ -1,4 +1,5 @@
-from ..configs.config import Config, ModelType
+from ..configs import Config, ModelType
+from .chunk import Chunk
 from .embed import Embed
 from .gemini_embed import GeminiEmbed
 from .hf_embed import HFEmbed

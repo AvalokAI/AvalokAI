@@ -1,6 +1,6 @@
 from langchain_core.documents.base import Document
 
-from ..embed.chunk import Chunk
+from ..embed import Chunk
 from .base_dataset import BaseDataset
 
 

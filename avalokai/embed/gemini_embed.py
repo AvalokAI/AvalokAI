@@ -2,7 +2,7 @@ import os
 
 import google.generativeai as genai
 
-from ..configs.config import Config
+from ..configs import Config
 from .embed import Embed
 
 

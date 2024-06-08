@@ -3,7 +3,7 @@ import os
 from langchain_core.documents.base import Document
 from s3torchconnector import S3IterableDataset, S3Reader
 
-from ..embed.chunk import Chunk
+from ..embed import Chunk
 from .base_dataset import BaseDataset
 
 

@@ -2,7 +2,7 @@ import os
 
 from openai import OpenAI
 
-from ..configs.config import Config
+from ..configs import Config
 from .embed import Embed
 
 
