@@ -9,7 +9,13 @@ from .embed import get_embedder
 from .embed.chunk import Chunk
 from .sink.tasks import insert_embeddings
 from .sink.vectordb import ChromaVectorDB
-from .source import RawData, get_data_loader, get_raw_dataset
+from .source import (
+    BaseDataset,
+    RawData,
+    get_data_loader,
+    get_raw_dataset,
+    get_s3_dataset,
+)
 
 
 class Indexer:
@@ -34,8 +40,7 @@ class Indexer:
     #     )
     #     self.db.insert_multiple(vectors)
 
-    def index_multiple_documents(self, datas: list[RawData]):
-        dataset = get_raw_dataset(datas, self.chunker)
+    def _index(self, dataset: BaseDataset):
         dataloader = get_data_loader(dataset, self.config.batch_size, 4)
         start = time.time()
         for batch in tqdm(dataloader):
@@ -55,3 +60,15 @@ class Indexer:
             print(f"Insert to celery {time.time()-start}")
 
             start = time.time()
+
+    def index_raw_data(self, datas: list[RawData]):
+        dataset = get_raw_dataset(datas, self.chunker)
+        self._index(dataset)
+
+    def index_s3_data(self, url: str, region: str):
+        dataset = get_s3_dataset(url, region, self.chunker)
+        for sample in dataset:
+            import pdb
+
+            pdb.set_trace()
+        self._index(dataset)
