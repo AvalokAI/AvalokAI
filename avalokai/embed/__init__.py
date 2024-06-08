@@ -1,7 +1,8 @@
 from ..configs.config import Config, ModelType
 from .embed import Embed
-from .gemini import GeminiEmbed
+from .gemini_embed import GeminiEmbed
 from .hf_embed import HFEmbed
+from .openai_embed import OpenAIEmbed
 from .st_embed import STEmbed
 
 
@@ -14,5 +15,8 @@ def get_embedder(config: Config, device: str):
 
     if config.model_type == ModelType.GEMINI:
         return GeminiEmbed(config)
+
+    if config.model_type == ModelType.OPENAI:
+        return OpenAIEmbed(config)
 
     return Embed()
