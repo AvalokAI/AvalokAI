@@ -1,4 +1,0 @@
-squeue --user sachingo
-python /opt/cluster_tools/babel_contrib/tir_tool/gpu.py
-/data/user_data/sachingo
-srun --mem=100G --gres gpu:A6000:1  --pty bash
