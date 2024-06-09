@@ -1,6 +1,6 @@
 main_config:
   batch_size: 10
-  model_name: "all-MiniLM-L6-v2"
+  model_name: "text-embedding-3-small"
 
 # context length: maximum number of tokens input to the model
 # chunk size: number of characters to include in each chunk of document
@@ -57,12 +57,6 @@ all-MiniLM-L6-v2:
   embedding_size: 384
   max_seq_len: 256
   model_type: "sentence_transformer"
-
-intfloat/e5-mistral-7b-instruct:
-  context_length: 32768
-  chunk_size: 25000
-  chunk_overlap: 400
-  embedding_size: 4096
 
 nlpaueb/legal-bert-base-uncased:
   context_length: 512
