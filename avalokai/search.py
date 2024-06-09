@@ -23,7 +23,7 @@ class Searcher:
         matches = self.db.retrive_chunks(embedding, top_k)
 
         for match in matches:
-            document_id, chunk_id = tuple(map(int, match["id"].rsplit("-", 1)))
+            document_id, chunk_id = tuple(match["id"].rsplit("-", 1))
             match["id"] = document_id
             match["chunk_id"] = chunk_id
         return matches
