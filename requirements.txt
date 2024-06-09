@@ -1,0 +1,15 @@
+sentence-transformers
+langchain
+pandas
+pinecone
+pyarrow
+chromadb
+google.generativeai
+Celery
+librabbitmq
+s3torchconnector
+openai
+streamlit
+
+--extra-index-url https://download.pytorch.org/whl/cu121
+torch

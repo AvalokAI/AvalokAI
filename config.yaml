@@ -1,0 +1,66 @@
+main_config:
+  batch_size: 10
+  model_name: "text-embedding-3-small"
+
+# context length: maximum number of tokens input to the model
+# chunk size: number of characters to include in each chunk of document
+# chunk overlap: number of characters overlap between two consecutive chunks
+# embedding size: models output embedding size
+# max_seq_len: maximum length of input sequence. should be <= context length. anything after this would be truncated
+
+# default chunk size is approx 4x max seq len
+
+models/embedding-001:
+  context_length: 2048
+  chunk_size: 7000
+  chunk_overlap: 600
+  embedding_size: 768
+  max_seq_len: 2048
+  model_type: "gemini"
+
+models/text-embedding-004:
+  context_length: 2048
+  chunk_size: 7000
+  chunk_overlap: 600
+  embedding_size: 768
+  max_seq_len: 2048
+  model_type: "gemini"
+
+text-embedding-3-small:
+  context_length: 8191
+  chunk_size: 16000
+  chunk_overlap: 600
+  embedding_size: 1536
+  max_seq_len: 4000
+  model_type: "openai"
+
+text-embedding-3-large:
+  context_length: 8191
+  chunk_size: 16000
+  chunk_overlap: 600
+  embedding_size: 3072
+  max_seq_len: 4000
+  model_type: "openai"
+
+Alibaba-NLP/gte-large-en-v1.5:
+  context_length: 8192
+  chunk_size: 16000
+  chunk_overlap: 600
+  embedding_size: 1024
+  max_seq_len: 3630
+  model_type: "hugging_face"
+
+all-MiniLM-L6-v2:
+  context_length: 256
+  chunk_size: 1000
+  chunk_overlap: 200
+  embedding_size: 384
+  max_seq_len: 256
+  model_type: "sentence_transformer"
+
+nlpaueb/legal-bert-base-uncased:
+  context_length: 512
+  chunk_size: 512
+  chunk_overlap: 100
+  embedding_size: 768
+  model_type: "hugging_face"
