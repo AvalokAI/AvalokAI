@@ -132,7 +132,7 @@ indexer.index_raw_data([document1, document2])
 
 # Features in development
 - [ ] Batch processing in OpenAI
-- [ ]Add support for multiple vector databases like Pinecone.
+- [ ] Add support for multiple vector databases like Pinecone.
 - [ ] Add support for basic search algorithms such as BM25
 - [ ] Add support for indexing only changed files in S3.
 - [ ] Add more data sources.
