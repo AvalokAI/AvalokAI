@@ -10,8 +10,8 @@ def side_bar():
         st.button(label="Clear search", on_click=clear_chat)
 
 
-def display(dbname: str):
+def display(dbname: str, config_file: str):
     if sessionKeys.DB_NAME not in st.session_state:
-        init_env(dbname)
+        init_env(dbname, config_file)
     side_bar()
     display_search()

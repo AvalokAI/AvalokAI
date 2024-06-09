@@ -16,9 +16,13 @@ def insert_embeddings(
     embedding_size: int,
     dbname: str,
 ):
+    if isinstance(embeddings, torch.Tensor):
+        embeddings = embeddings.tolist()
+    elif not isinstance(embeddings, list):
+        raise ValueError(f"unsupported embedding type {type(embeddings)}")
 
     vectors: list[VectorDBData] = VectorDBData.get_data(
-        embeddings.tolist(), metadata, ids, contents
+        embeddings, metadata, ids, contents
     )
 
     db = ChromaVectorDB(embedding_size, dbname, create=False)

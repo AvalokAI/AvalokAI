@@ -1,5 +1,3 @@
-import pathlib
-
 import torch
 
 from .configs import Config
@@ -8,9 +6,8 @@ from .sink.vectordb import ChromaVectorDB
 
 
 class Searcher:
-    def __init__(self, dbname: str) -> None:
-        repo_path = pathlib.Path(__file__).parent.resolve()
-        self.config = Config(repo_path.joinpath("configs", "config.yaml"))
+    def __init__(self, dbname: str, config_file: str) -> None:
+        self.config = Config(config_file)
         self.chunker = Chunk(self.config)
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.embedder = get_embedder(self.config, self.device)
@@ -18,7 +15,11 @@ class Searcher:
 
     def search(self, query, top_k=10):
         embedding = self.embedder.embed_single_text(query)
-        embedding = embedding.tolist()
+        if isinstance(embedding, torch.Tensor):
+            embedding = embedding.tolist()
+        elif not isinstance(embedding, list):
+            raise ValueError(f"unsupported embedding type {type(embedding)}")
+
         matches = self.db.retrive_chunks(embedding, top_k)
 
         for match in matches:

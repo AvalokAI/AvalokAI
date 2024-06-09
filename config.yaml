@@ -1,13 +1,14 @@
 main_config:
-  batch_size: 23
-  # model_name: "Alibaba-NLP/gte-large-en-v1.5"
-  # model_name: "nlpaueb/legal-bert-base-uncased"
+  batch_size: 10
   model_name: "all-MiniLM-L6-v2"
 
-# assuming each token is avg 4 length
-# context_length: model's context length
-# chunk_size = character length to break
-# max_seq_len: max_seq_len which model should actually process, should be less than context length
+# context length: maximum number of tokens input to the model
+# chunk size: number of characters to include in each chunk of document
+# chunk overlap: number of characters overlap between two consecutive chunks
+# embedding size: models output embedding size
+# max_seq_len: maximum length of input sequence. should be <= context length. anything after this would be truncated
+
+# default chunk size is approx 4x max seq len
 
 models/embedding-001:
   context_length: 2048

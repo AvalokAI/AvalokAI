@@ -1,5 +1,3 @@
-import pathlib
-
 import torch
 from tqdm import tqdm
 
@@ -17,9 +15,8 @@ from .source import (
 
 
 class Indexer:
-    def __init__(self, dbname: str) -> None:
-        repo_path = pathlib.Path(__file__).parent.resolve()
-        self.config = Config(repo_path.joinpath("configs", "config.yaml"))
+    def __init__(self, dbname: str, config_file: str) -> None:
+        self.config = Config(config_file)
         self.chunker = Chunk(self.config)
         self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.embedder = get_embedder(self.config, self.device)
