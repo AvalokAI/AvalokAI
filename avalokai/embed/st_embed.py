@@ -24,17 +24,8 @@ class STEmbed(Embed):
         return embeddings[0]
 
     def embed_multiple_documents(self, content: list[str]):
-        import time
-
-        start = time.time()
-
         embeddings = self.model.encode(content, convert_to_tensor=True)
-        print(embeddings.device)
-        print(f"Embed {time.time()-start}")
-
-        start = time.time()
         embeddings = embeddings.cpu()
-        print(f"To cpu {time.time()-start}")
 
         return embeddings
 

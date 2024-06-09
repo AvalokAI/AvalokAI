@@ -1,20 +1,21 @@
-import os
-
 import chromadb
-from langchain_core.documents.base import Document
-from pinecone import Pinecone, ServerlessSpec
 
 
 class VectorDBData:
-    def __init__(self, id: str, embedding: list, metadata: dict) -> None:
+    def __init__(self, id: str, embedding: list, metadata: dict, content: str) -> None:
         self.id = id
         self.embedding = embedding
         self.metadata = metadata
+        self.content = content
 
-    def get_data(embeddings: list, metadatas: list[dict], ids: list[str]):
+    def get_data(
+        embeddings: list, metadatas: list[dict], ids: list[str], contents: list[str]
+    ):
         vectors: list[VectorDBData] = []
-        for embedding, metadata, id in zip(embeddings, metadatas, ids):
-            vector = VectorDBData(id, embedding, metadata)
+        for embedding, metadata, id, content in zip(
+            embeddings, metadatas, ids, contents
+        ):
+            vector = VectorDBData(id, embedding, metadata, content)
             vectors.append(vector)
         return vectors
 
@@ -54,74 +55,28 @@ class ChromaVectorDB(VectorDB):
         embeddings = [sample.embedding for sample in data]
         metadatas = [sample.metadata for sample in data]
         ids = [sample.id for sample in data]
+        contents = [sample.content for sample in data]
 
-        return embeddings, metadatas, ids
+        return embeddings, metadatas, ids, contents
 
     def insert_multiple(self, data: list[VectorDBData]):
-        embeddings, metadatas, ids = self.get_insertable_format(data)
+        embeddings, metadatas, ids, contents = self.get_insertable_format(data)
         self.collection.add(
-            embeddings=embeddings,
-            metadatas=metadatas,
-            ids=ids,
+            embeddings=embeddings, metadatas=metadatas, ids=ids, documents=contents
         )
 
     def retrive_chunks(self, query_embedding: list, top_k: int):
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=top_k,
-            include=["distances"],
+            include=["distances", "documents"],
         )
 
-        print(results)
-
         matches = [
-            {"id": id, "score": distance}
-            for id, distance in zip(results["ids"][0], results["distances"][0])
+            {"id": id, "score": distance, "content": content}
+            for id, distance, content in zip(
+                results["ids"][0], results["distances"][0], results["documents"][0]
+            )
         ]
 
         return matches
-
-
-class PineConeVectorDB:
-    def __init__(self, dimension) -> None:
-        self.pc = Pinecone(api_key=os.environ["PINECONE_API_KEY"])
-        self.dimension = dimension
-        self.index_name = "court-listener-index"
-        if self.index_name not in self.pc.list_indexes().names():
-            self.pc.create_index(
-                name=self.index_name,
-                dimension=dimension,
-                metric="cosine",
-                spec=ServerlessSpec(cloud="aws", region="us-east-1"),
-            )
-        self.index = self.pc.Index(self.index_name)
-
-    def insert_multiple(self, vectors):
-        self.check_format(vectors)
-        self.index.upsert(vectors=vectors)
-
-    def check_format(self, vectors: list[dict]):
-        assert isinstance(vectors, list)
-        for vector in vectors:
-            assert len(vector.keys()) == 2
-            assert "id" in vector
-            assert "values" in vector
-
-    def retrive_chunks(self, query_embedding: list, top_k: int):
-        response = self.index.query(
-            vector=query_embedding,
-            top_k=top_k,
-            include_values=False,
-        )
-
-        return response["matches"]
-
-    def get_insertable_format(
-        self, embeddings: list, splits: list[Document], document_id: str
-    ):
-        vectors = []
-        for i, (embedding, split) in enumerate(zip(embeddings, splits)):
-            metadata = split.metadata
-            vector = {"id": f"{document_id}-{i}", "values": embedding}
-            vectors.append(vector)
-        return vectors

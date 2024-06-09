@@ -9,3 +9,4 @@ Celery
 librabbitmq
 s3torchconnector
 openai
+streamlit

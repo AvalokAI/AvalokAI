@@ -1,5 +1,4 @@
 import pathlib
-import time
 
 import torch
 from tqdm import tqdm
@@ -29,24 +28,18 @@ class Indexer:
 
     def _index(self, dataset: BaseDataset):
         dataloader = get_data_loader(dataset, self.config.batch_size, 4)
-        start = time.time()
-        for batch in tqdm(dataloader):
-            print("---------------------------------------------------")
-            print(f"Data load {time.time()-start}")
 
+        for batch in tqdm(dataloader):
             embeddings = self.embedder.embed_multiple_documents(batch["content"])
 
-            start = time.time()
             insert_embeddings.delay(
                 embeddings,
                 batch["metadata"],
                 batch["id"],
+                batch["content"],
                 self.config.embedding_size,
                 self.dbname,
             )
-            print(f"Insert to celery {time.time()-start}")
-
-            start = time.time()
 
     def index_raw_data(self, datas: list[RawData]):
         dataset = get_raw_dataset(datas, self.chunker)

@@ -1,7 +1,7 @@
 from langchain_core.documents.base import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from ..configs.config import Config
+from ..configs import Config
 
 
 class Chunk:
@@ -11,7 +11,7 @@ class Chunk:
             chunk_overlap=config.chunk_overlap,
             add_start_index=True,
         )
-        # self.tokenizer = AutoTokenizer.from_pretrained(config.model_name)
+
         self.chunk_size = config.chunk_size
         self.chunk_overlap = config.chunk_overlap
         assert self.chunk_size > self.chunk_overlap
