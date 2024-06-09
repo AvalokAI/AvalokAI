@@ -5,6 +5,8 @@ Avalok AI is a platform to build custom search on your documents and build AI as
 
 It provides a comprehensive solution for building search and RAG applications so that you do not have to spend time in building these solutions from scratch
 
+**Hosted version for organizations coming soon**
+
 # Features
 - Directly search inside documents on S3.
 - Use with OpenAI, Gemini APIs or run locally with Hugging Face models and Sentence Transformers.
@@ -136,6 +138,7 @@ indexer.index_raw_data([document1, document2])
 - [ ] Add support for basic search algorithms such as BM25
 - [ ] Add support for indexing only changed files in S3.
 - [ ] Add more data sources.
+- [ ] Hosted Version for companies
 
 # Feature request 
 - Please start a discussion or github issue to request for a feature.
