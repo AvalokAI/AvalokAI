@@ -144,7 +144,7 @@ indexer.index_raw_data([document1, document2])
 - Please start a discussion or github issue to request for a feature.
 
 # Feedback 
-We are always open for feedback. Start a github discussion or github issue. You can also email us at avalokai@gmail.com
+We are always open for feedback. Start a github discussion or github issue. You can also email us at aiavalokai@gmail.com
 
 Consider signing up for updates at [https://avalokai.com](https://avalokai.wixsite.com/avalokai)
 Follow us on Twitter https://x.com/avalokai
